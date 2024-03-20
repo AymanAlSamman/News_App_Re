@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_re/core/config/constants.dart';
+import 'package:news_app_re/home/widget/category_view.dart';
 import 'package:news_app_re/home/widget/custom_background_widget.dart';
 import 'package:news_app_re/home/widget/custom_drawer.dart';
 import 'package:news_app_re/home/widget/custom_item_widget.dart';
+import 'package:news_app_re/main.dart';
 import 'package:news_app_re/models/category_model.dart';
 
 class HomeView extends StatefulWidget {
@@ -61,46 +63,64 @@ class _HomeViewState extends State<HomeView> {
         appBar: AppBar(
           leadingWidth: 80,
           title: Text(
-            'News App',
+            selectedCategory == null ? 'News App' : selectedCategory!.title,
             style: Constants.theme.textTheme.titleLarge,
           ),
         ),
-        drawer: const CustomDrawer(),
-        body: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Pick your category\nof interest',
-                textAlign: TextAlign.start,
-                style: Constants.theme.textTheme.bodyLarge?.copyWith(
-                  color: Colors.black,
-                  height: 1.5,
+        drawer: CustomDrawer(onCategoryDrawerTap: onCategoryDrawerClick),
+        body: selectedCategory == null
+            ? Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'Pick your category\nof interest',
+                      textAlign: TextAlign.start,
+                      style: Constants.theme.textTheme.bodyLarge?.copyWith(
+                        color: Colors.black,
+                        height: 1.5,
+                      ),
+                    ),
+                    Expanded(
+                      child: GridView.builder(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 10,
+                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 20,
+                                crossAxisSpacing: 20,
+                                childAspectRatio: 4 / 5),
+                        itemBuilder: (context, index) => CustomItemWidget(
+                          index: index,
+                          categoryModel: categoriesList[index],
+                          onCategoryClicked: onCategoryClicked,
+                        ),
+                        itemCount: 6,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 10,
-                  ),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 20,
-                      crossAxisSpacing: 20,
-                      childAspectRatio: 4 / 5),
-                  itemBuilder: (context, index) => CustomItemWidget(
-                    index: index,
-                    categoryModel: categoriesList[index],
-                  ),
-                  itemCount: 6,
-                ),
-              ),
-            ],
-          ),
-        ),
+              )
+            : CategoryView(),
       ),
     );
+  }
+
+  CategoryModel? selectedCategory;
+
+  void onCategoryClicked(CategoryModel categoryModel) {
+    selectedCategory = categoryModel;
+    print(categoryModel.id);
+    setState(() {});
+  }
+
+  void onCategoryDrawerClick() {
+    selectedCategory = null;
+    Navigator.pop(context);
+    setState(() {});
   }
 }

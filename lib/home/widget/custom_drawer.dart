@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:news_app_re/core/config/constants.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+  Function onCategoryDrawerTap;
+   CustomDrawer({super.key, required this.onCategoryDrawerTap});
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +33,15 @@ class CustomDrawer extends StatelessWidget {
                   color: Colors.black,
                 ),
                 const SizedBox(width: 5,),
-                Text(
-                  "Categories",
-                  style: Constants.theme.textTheme.bodyLarge?.copyWith(
-                    color: Colors.black,
+                InkWell(
+                  onTap: () {
+                    onCategoryDrawerTap();
+                  },
+                  child: Text(
+                    "Categories",
+                    style: Constants.theme.textTheme.bodyLarge?.copyWith(
+                      color: Colors.black,
+                    ),
                   ),
                 )
               ],
