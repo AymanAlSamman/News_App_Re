@@ -18,6 +18,10 @@ class ArticlesItemWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // FastCachedImage(
+          //   url: article.urlToImage ?? "",
+          //
+          // ),
           ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
             child: Image.network(article.urlToImage ?? ""),
